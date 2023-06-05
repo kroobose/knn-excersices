@@ -1,0 +1,49 @@
+function outstr = strtrim(str,trimType)
+%outstr = strtrim(str,trimType)
+%   Removes any leading, trailing, both, or even all spaces (spaces, tabs, endlines,...)
+%   from the str string.
+%
+%   - str: string whose leading, trailing, both, or all spaces are to be removed
+%   - trimType: 'left', 'right', 'both' (default if empty or not given), 'full';
+%       'left' removes any leading spaces
+%       'right' removes any trailing spaces
+%       'both' removes any leading and trailing spaces
+%       'full' removes all space-type characters from the str string
+%
+%   - outstr: resulting (trimmed) string
+%
+%   NOOTES: if str is numeric no changes will be made (the same value will
+%           be returned)
+%
+% (c) Primoz Cermelj, primoz.cermelj@email.si
+% Last revision: 24.03.2003
+%-----------------------------------------------------------
+
+if (isempty(str)) | (nargin < 1)
+    outstr = [];
+    return
+end
+
+if nargin < 2 
+    trimType = 'both';
+end
+if isnumeric(str)
+    outstr = str;
+else
+    ind = find( ~isspace(str) );        % indices of the non-space characters in the str    
+    if isempty(ind)
+        outstr = [];        
+    else
+        if strcmpi(trimType,'left')
+            outstr = str( ind(1):end );
+        elseif strcmpi(trimType,'right')
+            outstr = str( 1:ind(end) );
+        elseif strcmpi(trimType,'both')
+            outstr = str( ind(1):ind(end) );
+        elseif strcmpi(trimType,'full')
+            outstr = str( ind );
+        else
+            error('Unknown string trimming operation');
+        end        
+    end
+end
